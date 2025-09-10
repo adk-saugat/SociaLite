@@ -1,6 +1,9 @@
 package models
 
-import "github.com/adk-saugat/socialite/db"
+import (
+	"github.com/adk-saugat/socialite/db"
+	"github.com/adk-saugat/socialite/utils"
+)
 
 type User struct{
 	ID			int64	
@@ -21,13 +24,19 @@ func (user *User) Register() error {
 	}
 	defer stmt.Close()
 
-	result , err := stmt.Exec(user.Username, user.Email, user.Password)
+	hashedPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return err
+	}
+
+	result , err := stmt.Exec(user.Username, user.Email, hashedPassword)
 	if err != nil {
 		return err
 	}
 
 	userId, err := result.LastInsertId()
 	user.ID = userId
+	user.Password = hashedPassword
 
 	return err
 }
