@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/adk-saugat/socialite/db"
 	"github.com/adk-saugat/socialite/utils"
 )
@@ -10,6 +12,28 @@ type User struct{
 	Username 	string
 	Email 		string	`binding:"required"`	
 	Password 	string	`binding:"required"`
+}
+
+func (user *User) ValidateCredentials() error{
+	query := `
+		SELECT id, password FROM users WHERE email = ?
+	`
+
+	row := db.DB.QueryRow(query, user.Email)
+
+	var retrievedPassword string
+	err := row.Scan(&user.ID, &retrievedPassword)
+	if err != nil {
+		return err
+	}
+
+	passwordIsValid := utils.CheckPasswordHash(user.Password, retrievedPassword)
+
+	if !passwordIsValid {
+		return errors.New("invalid credentials")
+	}
+
+	return nil
 }
 
 func (user *User) Register() error {

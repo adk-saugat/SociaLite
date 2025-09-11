@@ -13,4 +13,5 @@ func RegisterRoutes(server *gin.Engine){
 	})
 
 	server.POST("/auth/register", controllers.RegisterUser)
+	server.POST("/auth/login", controllers.LoginUser)
 }
