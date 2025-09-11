@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/adk-saugat/socialite/controllers"
+	"github.com/adk-saugat/socialite/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,4 +15,9 @@ func RegisterRoutes(server *gin.Engine){
 
 	server.POST("/auth/register", controllers.RegisterUser)
 	server.POST("/auth/login", controllers.LoginUser)
+
+	authenticated := server.Group("/")
+	authenticated.Use(middleware.Authenticate)
+
+	authenticated.POST("/post", controllers.CreatePost)
 }

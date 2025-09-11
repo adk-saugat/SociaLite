@@ -32,7 +32,6 @@ func LoginUser(ctx *gin.Context){
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Login successful!", "token": token})
-
 }
 
 func RegisterUser(ctx *gin.Context){

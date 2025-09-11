@@ -1,0 +1,7 @@
+POST http://localhost:8080/post
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdWdhdEBnbWFpbC5jb20iLCJleHAiOjE3NTc2MTI0MzcsInVzZXJJZCI6Mn0.RiVq7iswEfmcNypZyZ_mDZAv97vQQHK9Vrf3qrauBpw
+
+{
+    "content": "Travelling to New York city! Feeling excited!"
+}
