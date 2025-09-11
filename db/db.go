@@ -40,7 +40,7 @@ func createTables(){
 		CREATE TABLE IF NOT EXISTS posts(
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			content TEXT NOT NULL,
-			createdAt TIMESTAMPS NOT NULL,
+			createdAt TIMESTAMP NOT NULL,
 			userId INTEGER,
 			FOREIGN KEY(userId) REFERENCES users(id)
 		)

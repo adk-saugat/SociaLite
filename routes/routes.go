@@ -16,8 +16,12 @@ func RegisterRoutes(server *gin.Engine){
 	server.POST("/auth/register", controllers.RegisterUser)
 	server.POST("/auth/login", controllers.LoginUser)
 
+	server.GET("/post/all", controllers.FetchAllPosts)
+
+	// authenticated routes
 	authenticated := server.Group("/")
 	authenticated.Use(middleware.Authenticate)
 
 	authenticated.POST("/post", controllers.CreatePost)
+	
 }

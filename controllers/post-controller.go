@@ -7,6 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func FetchAllPosts(ctx *gin.Context){
+	posts, err := models.GetAllPosts()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Couldnot fetch all posts!"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"posts": posts})
+}
+
 
 func CreatePost(ctx *gin.Context){
 	var post models.Post

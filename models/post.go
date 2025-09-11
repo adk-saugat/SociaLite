@@ -13,6 +13,29 @@ type Post struct{
 	UserId 		int64		`json:"userId"`
 }
 
+func GetAllPosts() ([]Post, error){
+	query := `SELECT * FROM posts`
+
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []Post
+	for rows.Next() {
+		var post Post
+		err = rows.Scan(&post.ID, &post.Content, &post.CreatedAt, &post.UserId)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+	
+}
+
 func (post *Post) Save() error{
 	query := `
 		INSERT INTO posts(content, createdAt, userId)
