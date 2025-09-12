@@ -17,11 +17,11 @@ func RegisterRoutes(server *gin.Engine){
 	server.POST("/auth/login", controllers.LoginUser)
 
 	server.GET("/post/all", controllers.FetchAllPosts)
+	server.GET("/post/:id", controllers.FetchPost)
 
 	// authenticated routes
 	authenticated := server.Group("/")
 	authenticated.Use(middleware.Authenticate)
 
 	authenticated.POST("/post", controllers.CreatePost)
-	
 }

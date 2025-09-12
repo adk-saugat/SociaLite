@@ -1,7 +1,7 @@
 POST http://localhost:8080/post
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhlcm9AZ21haWwuY29tIiwiZXhwIjoxNzU3NjE0ODIzLCJ1c2VySWQiOjJ9.e4B75EdbGsiW-aAY8K5w8_kyRPEGwlZogk5Jy3aomPs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdWdhdEBnbWFpbC5jb20iLCJleHAiOjE3NTc2OTczMjEsInVzZXJJZCI6MX0.kNvBz_mGDGVBHngjqgKpCY7vhMpX3vCN0L6wfsCfE9w
 
 {
-    "content": "Coding a billion dollar startup!"
+    "content": "Going to New York City!"
 }

@@ -2,10 +2,27 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/adk-saugat/socialite/models"
 	"github.com/gin-gonic/gin"
 )
+
+func FetchPost(ctx *gin.Context){
+	postId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Couldnot parse postId!"})
+		return
+	}
+
+	post, err := models.GetPostByID(postId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Couldnot fetch post!"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"post": post})
+}
 
 func FetchAllPosts(ctx *gin.Context){
 	posts, err := models.GetAllPosts()

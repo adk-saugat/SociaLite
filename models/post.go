@@ -13,6 +13,19 @@ type Post struct{
 	UserId 		int64		`json:"userId"`
 }
 
+func GetPostByID(postId int64) (*Post, error){
+	query := `SELECT * FROM posts WHERE id = ?`
+
+	row := db.DB.QueryRow(query, postId)
+
+	var post Post
+	err := row.Scan(&post.ID, &post.Content, &post.CreatedAt, &post.UserId)
+	if err != nil {
+		return nil, err
+	}
+	return &post, nil
+}
+
 func GetAllPosts() ([]Post, error){
 	query := `SELECT * FROM posts`
 
