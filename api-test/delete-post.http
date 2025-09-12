@@ -1,7 +1,2 @@
-POST http://localhost:8080/post
-Content-Type: application/json
+DELETE http://localhost:8080/post/1
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhlcm9AZ21haWwuY29tIiwiZXhwIjoxNzU3Njk5MTQ4LCJ1c2VySWQiOjJ9.rXdvvaBVXeisGUbCfnoex5Fjvp8rHMt4khP1d-wh87k
-
-{
-    "content": "Cooking pizza and netflix!"
-}

@@ -8,6 +8,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func DeletePost(ctx *gin.Context){
+	postId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Couldnot parse postId!"})
+		return
+	}
+
+	userId := ctx.GetInt64("userId")
+	post, err := models.GetPostByID(postId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Couldnot fetch post!"})
+		return
+	}
+
+	if post.UserId != userId{
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Not authorized to delete event!"})
+		return 
+	}
+
+	err = post.Delete()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Couldnot delete post!"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully!"})
+}
+
 func FetchPost(ctx *gin.Context){
 	postId, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {

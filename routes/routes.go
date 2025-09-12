@@ -24,4 +24,5 @@ func RegisterRoutes(server *gin.Engine){
 	authenticated.Use(middleware.Authenticate)
 
 	authenticated.POST("/post", controllers.CreatePost)
+	authenticated.DELETE("/post/:id", controllers.DeletePost)
 }

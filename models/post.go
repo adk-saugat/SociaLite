@@ -75,3 +75,17 @@ func (post *Post) Save() error{
 
 	return nil
 }
+
+func (post *Post) Delete() error{
+	query := `
+		DELETE FROM posts WHERE id = ?
+	`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(post.ID)
+	return err
+}
