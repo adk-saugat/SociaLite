@@ -25,4 +25,6 @@ func RegisterRoutes(server *gin.Engine){
 
 	authenticated.POST("/post", controllers.CreatePost)
 	authenticated.DELETE("/post/:id", controllers.DeletePost)
+
+	authenticated.POST("/follow/:id", controllers.FollowUser)
 }

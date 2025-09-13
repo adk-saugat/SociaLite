@@ -49,4 +49,19 @@ func createTables(){
 	if err != nil {
 		panic("Couldnot create table!")
 	}
+
+	createFollowsTable := `
+		CREATE TABLE IF NOT EXISTS follows(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			followerId INTEGER NOT NULL,
+			followingId INTEGER NOT NULL,
+			FOREIGN KEY(followerId) REFERENCES users(id),
+			FOREIGN KEY(followingId) REFERENCES users(id),
+			UNIQUE (followerId, followingId)
+		)
+	`
+	_, err = DB.Exec(createFollowsTable)
+	if err != nil {
+		panic("Couldnot create table!")
+	}
 }

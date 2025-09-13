@@ -64,3 +64,17 @@ func (user *User) Register() error {
 
 	return err
 }
+
+func GetUserById(id int64) (*User, error){
+	query := `SELECT id, username, email FROM users WHERE id = ?`
+
+	row := db.DB.QueryRow(query, id)
+
+	var user User
+	err := row.Scan(&user.ID, &user.Username, &user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
