@@ -1,0 +1,2 @@
+DELETE http://localhost:8080/unfollow/1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhlcm9AZ21haWwuY29tIiwiZXhwIjoxNzU3ODMzNzc3LCJ1c2VySWQiOjJ9.xBP5N4BvKuGQYXF-lNe2lCCRSADeUB0CvSyWjk1hIO4
