@@ -23,6 +23,8 @@ func GetUserProfile(ctx *gin.Context){
 	}})
 }
 
+
+
 func GetUserFollowers(ctx *gin.Context){
 	userId := ctx.GetInt64("userId")
 

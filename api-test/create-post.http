@@ -1,7 +1,7 @@
 POST http://localhost:8080/post
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imhlcm9AZ21haWwuY29tIiwiZXhwIjoxNzU3Njk5MTQ4LCJ1c2VySWQiOjJ9.rXdvvaBVXeisGUbCfnoex5Fjvp8rHMt4khP1d-wh87k
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhdWdhdEBnbWFpbC5jb20iLCJleHAiOjE3NTc5NzYzMzIsInVzZXJJZCI6MX0.lieFJzeTr-R6NzwFClpLgQUs3XB78sj_EuIo9uLbN-Y
 
 {
-    "content": "Cooking pizza and netflix!"
+    "content": "Coding a million dollar startup!"
 }
