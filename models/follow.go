@@ -12,7 +12,7 @@ type Follow struct{
 	FollowingId int64
 }
 
-type Follower struct{
+type FollowUser struct{
 	Username string
 	FollowerId int64
 }
@@ -57,7 +57,7 @@ func Unfollows(userThatUnfollowedId, userToUnfollowId int64) error{
 	return err
 }
 
-func Followers(userId int64) ([]Follower, error){
+func Followers(userId int64) ([]FollowUser, error){
 	query := `
 		SELECT u.username, f.followerId
 		FROM follows AS f
@@ -70,9 +70,9 @@ func Followers(userId int64) ([]Follower, error){
 	}
 	defer rows.Close()
 
-	var followers []Follower
+	var followers []FollowUser
 	for rows.Next() {
-		var follower Follower
+		var follower FollowUser
 		if err := rows.Scan(&follower.Username, &follower.FollowerId); err != nil {
 			return nil, err
 		}
@@ -80,4 +80,29 @@ func Followers(userId int64) ([]Follower, error){
 	}
 
 	return followers, nil
+}
+
+func Following(userId int64) ([]FollowUser, error){
+	query := `
+		SELECT u.username, f.followingId
+		FROM follows AS f
+		JOIN users  AS u ON u.id = f.followingId
+		WHERE f.followerId = ?
+	`
+	rows, err := db.DB.Query(query, userId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followings []FollowUser
+	for rows.Next() {
+		var following FollowUser
+		if err := rows.Scan(&following.Username, &following.FollowerId); err != nil {
+			return nil, err
+		}
+		followings = append(followings, following)
+	}
+
+	return followings, nil
 }

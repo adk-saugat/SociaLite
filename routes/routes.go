@@ -28,6 +28,7 @@ func RegisterRoutes(server *gin.Engine){
 	// user routes
 	authenticated.GET("/user/me", controllers.GetUserProfile)
 	authenticated.GET("/user/follower", controllers.GetUserFollowers)
+	authenticated.GET("/user/following", controllers.GetUserFollowing)
 
 	//post routes
 	authenticated.POST("/post", controllers.CreatePost)

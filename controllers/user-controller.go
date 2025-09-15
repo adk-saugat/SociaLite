@@ -40,3 +40,21 @@ func GetUserFollowers(ctx *gin.Context){
 
 	ctx.JSON(http.StatusOK, gin.H{"followers": followers})
 }
+
+func GetUserFollowing(ctx *gin.Context){
+	userId := ctx.GetInt64("userId")
+
+	_ , err := models.GetUserById(userId)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Couldnot find user!"})
+		return
+	}
+
+	followings, err  :=models.Following(userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Couldnot find followers!"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"following": followings})
+}
