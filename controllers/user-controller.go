@@ -22,3 +22,21 @@ func GetUserProfile(ctx *gin.Context){
 		"email": user.Email,
 	}})
 }
+
+func GetUserFollowers(ctx *gin.Context){
+	userId := ctx.GetInt64("userId")
+
+	_ , err := models.GetUserById(userId)
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Couldnot find user!"})
+		return
+	}
+
+	followers, err  :=models.Followers(userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Couldnot find followers!"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"followers": followers})
+}

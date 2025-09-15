@@ -78,3 +78,4 @@ func GetUserById(id int64) (*User, error){
 
 	return &user, nil
 }
+

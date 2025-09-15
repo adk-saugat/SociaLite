@@ -49,5 +49,5 @@ func RegisterUser(ctx *gin.Context){
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "User created successfully!", "user": user})
+	ctx.JSON(http.StatusCreated, gin.H{"message": "User created successfully!"})
 }
