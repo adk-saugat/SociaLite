@@ -14,7 +14,7 @@ type Post struct{
 }
 
 func GetPostByID(postId int64) (*Post, error){
-	query := `SELECT * FROM posts WHERE id = ?`
+	query := `SELECT id, content, "createdAt", "userId" FROM posts WHERE id = $1`
 
 	row := db.DB.QueryRow(query, postId)
 
@@ -27,7 +27,7 @@ func GetPostByID(postId int64) (*Post, error){
 }
 
 func GetAllPosts() ([]Post, error){
-	query := `SELECT * FROM posts`
+	query := `SELECT id, content, "createdAt", "userId" FROM posts`
 
 	rows, err := db.DB.Query(query)
 	if err != nil {
@@ -51,8 +51,8 @@ func GetAllPosts() ([]Post, error){
 
 func (post *Post) Save() error{
 	query := `
-		INSERT INTO posts(content, createdAt, userId)
-		VALUES (?, ?, ?)
+		INSERT INTO posts(content, "createdAt", "userId")
+		VALUES ($1, $2, $3)
 	`
 
 	stmt, err := db.DB.Prepare(query)
@@ -78,7 +78,7 @@ func (post *Post) Save() error{
 
 func (post *Post) Delete() error{
 	query := `
-		DELETE FROM posts WHERE id = ?
+		DELETE FROM posts WHERE id = $1
 	`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {

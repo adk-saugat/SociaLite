@@ -19,8 +19,8 @@ type FollowUser struct{
 
 func Follows(userThatFollowedId, userToFollowId int64) error{
 	query :=  `
-		INSERT INTO follows(followerId, followingId)
-		VALUES (?, ?)
+		INSERT INTO follows("followerId", "followingId")
+		VALUES ($1, $2)
 	`
 
 	stmt, err := db.DB.Prepare(query)
@@ -38,7 +38,7 @@ func Follows(userThatFollowedId, userToFollowId int64) error{
 }
 
 func Unfollows(userThatUnfollowedId, userToUnfollowId int64) error{
-	query := `DELETE FROM follows WHERE followerId = ? AND followingId = ?`
+	query := `DELETE FROM follows WHERE "followerId" = $1 AND "followingId" = $2`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
 		return err
@@ -59,10 +59,10 @@ func Unfollows(userThatUnfollowedId, userToUnfollowId int64) error{
 
 func Followers(userId int64) ([]FollowUser, error){
 	query := `
-		SELECT u.username, f.followerId
+		SELECT u.username, f."followerId"
 		FROM follows AS f
-		JOIN users  AS u ON u.id = f.followerId
-		WHERE f.followingId = ?
+		JOIN users AS u ON u.id = f."followerId"
+		WHERE f."followingId" = $1
 	`
 	rows, err := db.DB.Query(query, userId)
 	if err != nil {
@@ -84,10 +84,10 @@ func Followers(userId int64) ([]FollowUser, error){
 
 func Following(userId int64) ([]FollowUser, error){
 	query := `
-		SELECT u.username, f.followingId
+		SELECT u.username, f."followingId"
 		FROM follows AS f
-		JOIN users  AS u ON u.id = f.followingId
-		WHERE f.followerId = ?
+		JOIN users AS u ON u.id = f."followingId"
+		WHERE f."followerId" = $1
 	`
 	rows, err := db.DB.Query(query, userId)
 	if err != nil {

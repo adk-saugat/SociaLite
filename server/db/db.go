@@ -2,29 +2,42 @@ package db
 
 import (
 	"database/sql"
+	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 var DB *sql.DB
 
-func InitDB(){
+func InitDB() {
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		connStr = os.Getenv("SQL_CONNECTION_STRING")
+	}
+	if connStr == "" {
+		panic("DATABASE_URL or SQL_CONNECTION_STRING environment variable is required")
+	}
+
 	var err error
-	DB, err = sql.Open("sqlite3", "api.db")
+	DB, err = sql.Open("pgx", connStr)
 	if err != nil {
-		panic("Couldnot connect to database!")
+		panic("Could not connect to database!")
 	}
 
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(5)
 
+	if err := DB.Ping(); err != nil {
+		panic("Could not ping database!")
+	}
+
 	createTables()
 }
 
-func createTables(){
+func createTables() {
 	createUserTable := `
 		CREATE TABLE IF NOT EXISTS users(
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id BIGSERIAL PRIMARY KEY,
 			username TEXT NOT NULL,
 			email TEXT NOT NULL UNIQUE,
 			password TEXT NOT NULL
@@ -33,35 +46,32 @@ func createTables(){
 
 	_, err := DB.Exec(createUserTable)
 	if err != nil {
-		panic("Couldnot create table!")
+		panic("Could not create users table: " + err.Error())
 	}
 
 	createPostTable := `
 		CREATE TABLE IF NOT EXISTS posts(
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			id BIGSERIAL PRIMARY KEY,
 			content TEXT NOT NULL,
-			createdAt TIMESTAMP NOT NULL,
-			userId INTEGER,
-			FOREIGN KEY(userId) REFERENCES users(id)
+			"createdAt" TIMESTAMP NOT NULL,
+			"userId" BIGINT REFERENCES users(id)
 		)
 	`
 	_, err = DB.Exec(createPostTable)
 	if err != nil {
-		panic("Couldnot create table!")
+		panic("Could not create posts table: " + err.Error())
 	}
 
 	createFollowsTable := `
 		CREATE TABLE IF NOT EXISTS follows(
-			id INTEGER PRIMARY KEY AUTOINCREMENT,
-			followerId INTEGER NOT NULL,
-			followingId INTEGER NOT NULL,
-			FOREIGN KEY(followerId) REFERENCES users(id),
-			FOREIGN KEY(followingId) REFERENCES users(id),
-			UNIQUE (followerId, followingId)
+			id BIGSERIAL PRIMARY KEY,
+			"followerId" BIGINT NOT NULL REFERENCES users(id),
+			"followingId" BIGINT NOT NULL REFERENCES users(id),
+			UNIQUE ("followerId", "followingId")
 		)
 	`
 	_, err = DB.Exec(createFollowsTable)
 	if err != nil {
-		panic("Couldnot create table!")
+		panic("Could not create follows table: " + err.Error())
 	}
 }

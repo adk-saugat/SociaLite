@@ -16,7 +16,7 @@ type User struct{
 
 func (user *User) ValidateCredentials() error{
 	query := `
-		SELECT id, password FROM users WHERE email = ?
+		SELECT id, password FROM users WHERE email = $1
 	`
 
 	row := db.DB.QueryRow(query, user.Email)
@@ -39,34 +39,26 @@ func (user *User) ValidateCredentials() error{
 func (user *User) Register() error {
 	query := `
 		INSERT INTO users(username, email, password)
-		VALUES (?, ?, ?)
+		VALUES ($1, $2, $3)
+		RETURNING id
 	`
-
-	stmt, err := db.DB.Prepare(query)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
 
 	hashedPassword, err := utils.HashPassword(user.Password)
 	if err != nil {
 		return err
 	}
 
-	result , err := stmt.Exec(user.Username, user.Email, hashedPassword)
+	err = db.DB.QueryRow(query, user.Username, user.Email, hashedPassword).Scan(&user.ID)
 	if err != nil {
 		return err
 	}
 
-	userId, err := result.LastInsertId()
-	user.ID = userId
 	user.Password = hashedPassword
-
-	return err
+	return nil
 }
 
 func GetUserById(id int64) (*User, error){
-	query := `SELECT id, username, email FROM users WHERE id = ?`
+	query := `SELECT id, username, email FROM users WHERE id = $1`
 
 	row := db.DB.QueryRow(query, id)
 
