@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 
-	"github.com/adk-saugat/socialite/db"
+	"github.com/adk-saugat/socialite/server/db"
 )
 
 type Follow struct{

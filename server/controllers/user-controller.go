@@ -3,7 +3,7 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/adk-saugat/socialite/models"
+	"github.com/adk-saugat/socialite/server/models"
 	"github.com/gin-gonic/gin"
 )
 

@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/adk-saugat/socialite/utils"
+	"github.com/adk-saugat/socialite/shared/utils"
 	"github.com/gin-gonic/gin"
 )
 

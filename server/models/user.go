@@ -3,8 +3,8 @@ package models
 import (
 	"errors"
 
-	"github.com/adk-saugat/socialite/db"
-	"github.com/adk-saugat/socialite/utils"
+	"github.com/adk-saugat/socialite/server/db"
+	"github.com/adk-saugat/socialite/shared/utils"
 )
 
 type User struct{
@@ -78,4 +78,3 @@ func GetUserById(id int64) (*User, error){
 
 	return &user, nil
 }
-

@@ -1,9 +1,12 @@
 package main
 
 import (
-	"github.com/adk-saugat/socialite/db"
-	"github.com/adk-saugat/socialite/routes"
-	"github.com/adk-saugat/socialite/utils"
+	"fmt"
+	"os"
+
+	"github.com/adk-saugat/socialite/server/db"
+	"github.com/adk-saugat/socialite/server/routes"
+	"github.com/adk-saugat/socialite/shared/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -20,5 +23,10 @@ func main(){
 	utils.SetCors(server)
 	routes.RegisterRoutes(server)
 
-	server.Run(":8080")
+	PORT := os.Getenv("PORT")
+	if PORT == ""{
+		PORT = "8080"
+	}
+
+	server.Run(fmt.Sprintf(":%v", PORT))
 }

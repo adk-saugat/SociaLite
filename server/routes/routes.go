@@ -3,8 +3,8 @@ package routes
 import (
 	"net/http"
 
-	"github.com/adk-saugat/socialite/controllers"
-	"github.com/adk-saugat/socialite/middleware"
+	"github.com/adk-saugat/socialite/server/controllers"
+	"github.com/adk-saugat/socialite/server/middleware"
 	"github.com/gin-gonic/gin"
 )
 
