@@ -26,54 +26,45 @@ func GetPostByID(postId int64) (*Post, error){
 	return &post, nil
 }
 
-func GetAllPosts() ([]Post, error){
-	query := `SELECT id, content, "createdAt", "userId" FROM posts`
+type PostWithAuthor struct {
+	Post
+	Username string `json:"username"`
+}
 
+func GetAllPosts() ([]PostWithAuthor, error) {
+	query := `
+		SELECT p.id, p.content, p."createdAt", p."userId", u.username
+		FROM posts p
+		JOIN users u ON u.id = p."userId"
+		ORDER BY p."createdAt" DESC
+	`
 	rows, err := db.DB.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var posts []Post
+	var posts []PostWithAuthor
 	for rows.Next() {
-		var post Post
-		err = rows.Scan(&post.ID, &post.Content, &post.CreatedAt, &post.UserId)
+		var p PostWithAuthor
+		err = rows.Scan(&p.ID, &p.Content, &p.CreatedAt, &p.UserId, &p.Username)
 		if err != nil {
 			return nil, err
 		}
-		posts = append(posts, post)
+		posts = append(posts, p)
 	}
-
 	return posts, nil
-	
 }
 
-func (post *Post) Save() error{
+func (post *Post) Save() error {
 	query := `
 		INSERT INTO posts(content, "createdAt", "userId")
 		VALUES ($1, $2, $3)
+		RETURNING id
 	`
 
-	stmt, err := db.DB.Prepare(query)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
 	post.CreatedAt = time.Now()
-	result, err := stmt.Exec(post.Content, post.CreatedAt, post.UserId)
-	if err != nil {
-		return err
-	}
-
-	postID, err := result.LastInsertId()
-	if err != nil {
-		return err
-	}
-	post.ID = postID
-
-	return nil
+	return db.DB.QueryRow(query, post.Content, post.CreatedAt, post.UserId).Scan(&post.ID)
 }
 
 func (post *Post) Delete() error{

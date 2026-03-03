@@ -81,5 +81,19 @@ func CreatePost(ctx *gin.Context){
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "Post created successfully!", "post": post})
+	user, _ := models.GetUserById(userId)
+	username := ""
+	if user != nil {
+		username = user.Username
+	}
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "Post created successfully!",
+		"post": gin.H{
+			"id":        post.ID,
+			"content":   post.Content,
+			"createdAt": post.CreatedAt,
+			"userId":    post.UserId,
+			"username":  username,
+		},
+	})
 }
